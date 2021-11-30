@@ -1,43 +1,43 @@
 from db import db
-from agency import Agency
+from agency import agency
 from car import Car
 from authentication import Authentication
-
-# Leemos carros de la base de datos e inicalizamos nuestra instncia de agencia con ellos
-cars = []
-for _car in db['cars']:
-    cars.append(Car(_car))
-
-# Creamos instancia global de Agencia
-agency = Agency("Super Agencia de Kelbin", cars)
+from menu import Menu, Item
+from menus import Menus
+from config import config
 
 # Pintamos Bienvenida
-print(f"Bienvenidos a {agency.name}")
+print(config["saludo"](agency.name))
 
-def login():
+# Nos identificamos como usuario
+user = None
+menu = None
+
+def authenticate():
     print("Porfavor identificate")
     username = input("username: ")
     password = input("password: ")
-    return {
-        'username': username,
-        'password': password
-    }
-
-def authenticate(log):
-    user = Authentication().signIn(log['username'], log['password'])
+    user = Authentication().signIn(username, password)
     if(user != False):
         return user
     print("Error de autenticacion")
-    return authenticate(login())
+    return authenticate()
 
-# Nos identificamos como usuario
-user = authenticate(login())
+def logUser():
+    global user, menu
+    user = authenticate()
+    menu = getMenus()[0]
+    Menu.render(menu)
 
-print(user.isAdmin)
+# definimos el tipo de menu que vamos a utlizar
+def getMenus():
+    global user
+    return Menus(user, {
+        # Podemos definir items por defecto que esten presentes en los menus principales
+        "defaults": [
+            Item("logout", lambda: logUser()),
+            Item("exit", lambda: exit()),
+        ]
+    })
 
-if(user.isAdmin):
-    # Aplicar logica para administrador
-    print("Usuario Administrador")
-else:
-    # Aplicar logica para cliente
-    print("Usuario Cliente")
+logUser()

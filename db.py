@@ -1,8 +1,8 @@
 db = {
     'users': [
-        {'id':1,'username': 'admin', 'password': 'admin', 'isAdmin': True, 'record': None},
-        {'id':2,'username': 'customer1', 'password': 'customer', 'isAdmin': False, 'record': 'good'},
-        {'id':3,'username': 'customer2', 'password': 'customer', 'isAdmin': False, 'record': 'bad'},
+        {'id':1,'username': 'admin', 'password': 'admin', 'isAdmin': True, 'type': 'Administrator', 'record': None},
+        {'id':2,'username': 'customer1', 'password': 'customer', 'isAdmin': False, 'type': 'Customer', 'record': 'good'},
+        {'id':3,'username': 'customer2', 'password': 'customer', 'isAdmin': False, 'type': 'Customer', 'record': 'bad'},
     ],
     'cars': [
         {'id': 1, 'model': 'yaris', 'price': 27000, 'color': 'rojo'},

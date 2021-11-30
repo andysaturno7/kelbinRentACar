@@ -1,4 +1,7 @@
 from rent import Rent
+from config import config
+from db import db
+from car import Car
 
 class Agency:
     reservationsAccount = 0
@@ -8,6 +11,7 @@ class Agency:
     def __init__(self, name, cars):
         self.name = name
         self.cars = cars
+        self.carsAccount = len(cars)
 
     def getCars(self):
         return self.cars
@@ -18,6 +22,13 @@ class Agency:
             if  _car.id == _id:
                 car = _car
                 break
+        return car
+
+    def addCar(self, data):
+        _id = self.carsAccount + 1
+        data = {**data, "id": _id}
+        car = Car(data)
+        self.cars.append(car)
         return car
 
     def getCarsByStatus(self, status = "available" or "reserved" or "rented"):
@@ -95,3 +106,11 @@ class Agency:
                 removed = True
                 break
         return removed
+
+# Leemos carros de la base de datos e inicalizamos nuestra instncia de agencia con ellos
+cars = []
+for _car in db['cars']:
+    cars.append(Car(_car))
+
+# Creamos instancia global de Agencia
+agency = Agency(config["agency"], cars)
